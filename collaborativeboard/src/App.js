@@ -14,6 +14,7 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 
 const ENDPOINT = "http://127.0.0.1:4001";
+var socket = io.connect('http://localhost:5000');
 
 function App() {
 
@@ -36,10 +37,7 @@ function App() {
   };
 
   const {transcript} = useSpeechRecognition();
-  var socket = io.connect('http://localhost:5000');
-  socket.on("canvas-data", function() {
-    console.log("connecting to server");
-  });
+  console.log(stageEl.current);
   const URLImage = ({image}) => {
     const [img] = useImage(image.src);
     return (
@@ -64,14 +62,16 @@ function App() {
     setIsDrawing(true);
     if(isDrawing){
       console.log(isDrawing);
+      console.log(stageEl.current.getStage());
       addLine(stageEl.current.getStage(), layerEl.current, brushSize);
+      
     };
   };
-
+  
   const eraseLine = () => {
     addLine(stageEl.current.getStage(), layerEl.current, brushSize, "erase");
   };
-  socket.on('canvas-data', drawLine);
+ 
   const addRectangle = () => {
     setIsDrawing(false);
     const rect = {

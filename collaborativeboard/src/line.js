@@ -2,10 +2,12 @@ import Konva from "konva";
 import { Socket } from "socket.io";
 import App from './App';
 import io from 'socket.io-client';
+
+var socket = io.connect();
 export const addLine = (stage, layer, brushSize, mode = "brush") => {
   let isDrawing = false;
   let lastLine;
-  var socket = io.connect();
+
     stage.on("mousedown touchstart", function(e) {
       isDrawing = true;
       let pos = stage.getPointerPosition();
@@ -17,9 +19,11 @@ export const addLine = (stage, layer, brushSize, mode = "brush") => {
         points: [pos.x, pos.y]
       });
       layer.add(lastLine);
-      console.log("lastline" + lastLine);
-      socket.emit('canvas-data', lastLine);
+   
+     
+    
     });
+    
     stage.on("mouseup touchend", function() {
       isDrawing = false;
     });
@@ -30,8 +34,9 @@ export const addLine = (stage, layer, brushSize, mode = "brush") => {
     const pos = stage.getPointerPosition();
       let newPoints = lastLine.points().concat([pos.x, pos.y]);
       lastLine.points(newPoints);
-      layer.batchDraw();
       
+      layer.batchDraw();
+     
     });
   
 

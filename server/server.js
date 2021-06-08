@@ -19,8 +19,9 @@ io.on('connection', (socket)=> {
             connections = connections.filter((con) => con.id !== socket.id);
       });
       socket.on('canvas-data', (data)=> {
-            socket.broadcast.emit('canvas-data', data);
             console.log(data);
+            socket.broadcast.emit('canvas-data', data);
+            
       });
 })
 
